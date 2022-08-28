@@ -1,9 +1,9 @@
-# [keras-unet-collection] UNet and Attention-UNet models for Plot Delineation as an application of Instance Segmentation.
+# [keras-unet-collection] UNet and Attention-UNet models for Plot Delineation.
 
-[Notice] : The original code came from [here](https://www.youtube.com/watch?v=L5iV5BHkMzM&t=1176s) and was adjusted to be work on Field Boundary Detection.
+[Notice] : The original code came from [here](https://www.youtube.com/watch?v=L5iV5BHkMzM&t=1176s) and was adjusted to work on Field Boundaries Detection.
 
 
- The datasets come from Sentinel -2 images for Agriculture Rice growing fields in Senegal [here](https://drive.google.com/drive/folders/1t_aWfuQ_K-jWCehr0cz7Czk60T3UpceB?usp=sharing).
+ The datasets came from Sentinel -2 imagery for Agriculture Rice growing fields in Senegal [here](https://drive.google.com/drive/folders/1t_aWfuQ_K-jWCehr0cz7Czk60T3UpceB?usp=sharing).
 
 
 # Training
