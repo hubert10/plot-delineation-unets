@@ -8,12 +8,10 @@
 
 # Training
 
-* [train_attention_unet_model.py](train_attention_unet_model.py) Run the above script to train your attention unet model.
-
-It includes code to run object detection and instance segmentation on arbitrary images.
-
+* [train_attention_unet_model.py](train_attention_unet_model.py) Run this script to train your attention unet model.
 
 # Prediction
 
-* [pred_attention_unet.py](pred_attention_unet.py) shows how to Run the above script to make predictons with the trained attention unet model.
+* [pred_attention_unet.py](pred_attention_unet.py)
+Run this script to make predictons with the trained attention unet model.
 
