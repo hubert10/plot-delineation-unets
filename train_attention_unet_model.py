@@ -1,12 +1,14 @@
 # https://youtu.be/ZoJuhRbzEiM
 """
-Mitochondria semantic segmentation using U-net, Attention Unet and R2 Unet
+PLot Boundarie semantic segmentation using U-net, Attention Unet and R2 Unet
 and others using keras-unet-collection library.
 # https://github.com/yingkaisha/keras-unet-collection
 
-Author: Dr. Sreenivas Bhattiprolu
+Code from Dr. Sreenivas Bhattiprolu
+Modified by: Hubert
 
-Dataset from: https://www.epfl.ch/labs/cvlab/data/data-em/
+Dataset from: Sentinel -2 images from Agriculture Rice growing fields in Senegal
+https://drive.google.com/drive/folders/1t_aWfuQ_K-jWCehr0cz7Czk60T3UpceB?usp=sharing
 Images and masks are divided into patches of 256x256. 
 """
 
@@ -23,11 +25,6 @@ from datetime import datetime
 import cv2
 from PIL import Image
 #from keras import backend, optimizers
-
-
-# force channels-first ordering for all loaded images
-#backend.set_image_data_format('channels_last')  #The models are designed to use channels first
-
 
 image_directory = 'data/images/'
 mask_directory = 'data/masks/'
@@ -64,7 +61,6 @@ image_dataset = np.array(image_dataset)/255.
 mask_dataset = np.expand_dims((np.array(mask_dataset)),3) /255.
 
 
-
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(image_dataset, mask_dataset, test_size = 0.10, random_state = 0)
 
@@ -94,7 +90,6 @@ batch_size = 8
 ###############################################################################
 #Try various models: Unet, Attention_UNet, and Attention_ResUnet
 
-
 from keras_unet_collection import models, losses
 
 ##############################################################################
@@ -113,7 +108,6 @@ model_att_unet = models.att_unet_2d((256, 256, 3), filter_num=[64, 128, 256, 512
                            freeze_backbone=True, freeze_batch_norm=True, 
                            name='attunet')
 
-
 model_att_unet.compile(loss='binary_crossentropy', optimizer=Adam(lr = 1e-3), 
               metrics=['accuracy', losses.dice_coef])
 
@@ -126,7 +120,7 @@ att_unet_history = model_att_unet.fit(X_train, y_train,
                     batch_size = batch_size,
                     validation_data=(X_test, y_test ), 
                     shuffle=False,
-                    epochs=50)
+                    epochs=5)
 
 stop3 = datetime.now()
 #Execution time of the model 
@@ -149,7 +143,6 @@ att_unet_history_df = pd.DataFrame(att_unet_history.history)
 with open('att_unet_history_df.csv', mode='w') as f:
     att_unet_history_df.to_csv(f)    
 
-     
 #######################################################################
 #Check history plots, one model at a time
 history = att_unet_history
@@ -195,27 +188,12 @@ ground_truth=y_test[test_img_number]
 test_img_input=np.expand_dims(test_img, 0)
 prediction = (model.predict(test_img_input)[0,:,:,0] > 0.5).astype(np.uint8)
 
-plt.figure(figsize=(16, 8))
-plt.subplot(231)
-plt.title('Testing Image')
-plt.imshow(test_img, cmap='gray')
-plt.subplot(232)
-plt.title('Testing Label')
-plt.imshow(ground_truth[:,:,0], cmap='gray')
-plt.subplot(233)
-plt.title('Prediction on test image')
-plt.imshow(prediction, cmap='gray')
-
-plt.show()
-
-
 #IoU for a single image
 from tensorflow.keras.metrics import MeanIoU
 n_classes = 2
 IOU_keras = MeanIoU(num_classes=n_classes)  
 IOU_keras.update_state(ground_truth[:,:,0], prediction)
 print("Mean IoU =", IOU_keras.result().numpy())
-
 
 #Calculate IoU and average
  
